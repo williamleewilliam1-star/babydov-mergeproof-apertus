@@ -79,6 +79,47 @@ export function fallbackAnalysis(evidence, language = "English") {
   };
 }
 
+
+function evidenceRefExists(ref, evidence) {
+  if (/^pr\.[a-z_]+$/.test(ref)) {
+    const key = ref.slice(3);
+    return Object.prototype.hasOwnProperty.call(evidence.pr || {}, key);
+  }
+  const m = ref.match(/^(files|linked_issues|release_matches)\[(\d+)\](?:\.[a-z_]+)?$/);
+  if (!m) return false;
+  const rows = evidence[m[1]] || [];
+  return Number(m[2]) < rows.length;
+}
+
+export function sanitizeAnalysis(input, evidence, language = "English") {
+  const safe = fallbackAnalysis(evidence, language);
+  const source = input && typeof input === "object" ? input : {};
+  const rawClaims = Array.isArray(source.claims) ? source.claims : [];
+  const claims = rawClaims.map(item => {
+    const refs = Array.isArray(item?.evidence_refs)
+      ? item.evidence_refs.map(String).filter(ref => evidenceRefExists(ref, evidence))
+      : [];
+    return { claim: String(item?.claim || "").trim(), evidence_refs: refs };
+  }).filter(item => item.claim && item.evidence_refs.length);
+
+  const caveats = Array.isArray(source.caveats)
+    ? source.caveats.map(String).filter(Boolean)
+    : [];
+  if (claims.length < rawClaims.length) {
+    caveats.push("One or more model claims were removed because they lacked valid evidence references.");
+  }
+
+  return {
+    status: evidence.pr?.merged ? "MERGED" : "NOT_MERGED",
+    language: String(source.language || language).slice(0, 80),
+    technical_summary: String(source.technical_summary || safe.technical_summary),
+    portfolio_statement: String(source.portfolio_statement || safe.portfolio_statement),
+    claims: claims.length ? claims : safe.claims,
+    caveats: caveats.length ? caveats : safe.caveats,
+    grounding: { input_claims: rawClaims.length, accepted_claims: claims.length, rejected_claims: rawClaims.length - claims.length }
+  };
+}
+
 export function buildApertusPrompt(evidence, language) {
   return [
     "You are MergeProof, an evidence-first open-source contribution analyst.",

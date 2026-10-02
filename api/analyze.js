@@ -3,7 +3,8 @@ import {
   extractIssueRefs,
   fallbackAnalysis,
   parseJsonText,
-  parsePullRequestUrl
+  parsePullRequestUrl,
+  sanitizeAnalysis
 } from "../src/core.js";
 
 function json(res, status, payload) {
@@ -14,12 +15,15 @@ function json(res, status, payload) {
 }
 
 async function gh(path, accept = "application/vnd.github+json") {
+  const headers = {
+    accept,
+    "user-agent": "BABYDOV-MergeProof/0.1",
+    "x-github-api-version": "2022-11-28"
+  };
+  const token = String(process.env.GITHUB_TOKEN || "").trim();
+  if (token) headers.authorization = `Bearer ${token}`;
   const response = await fetch("https://api.github.com" + path, {
-    headers: {
-      accept,
-      "user-agent": "BABYDOV-MergeProof/0.1",
-      "x-github-api-version": "2022-11-28"
-    },
+    headers,
     signal: AbortSignal.timeout(12000)
   });
   if (!response.ok) throw new Error(`GitHub API failed: HTTP ${response.status}`);
@@ -86,7 +90,7 @@ async function collectEvidence(ref) {
     release_matches
   };
 }
-async function apertureAnalyze(evidence, language) {
+export async function apertureAnalyze(evidence, language) {
   const base = String(process.env.APERTUS_BASE_URL || "").replace(/\/$/, "");
   const model = String(process.env.APERTUS_MODEL || "swiss-ai/Apertus-v1.5-8B");
   if (!base) return {
@@ -118,7 +122,7 @@ async function apertureAnalyze(evidence, language) {
   return {
     mode: "apertus",
     model: payload.model || model,
-    analysis: parseJsonText(content)
+    analysis: sanitizeAnalysis(parseJsonText(content), evidence, language)
   };
 }
 
