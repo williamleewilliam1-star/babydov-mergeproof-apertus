@@ -107,7 +107,8 @@ The remaining deployment task is connecting an Apertus inference endpoint and pu
 ## Current status
 
 - Public GitHub repository: ready.
-- MIT license: ready.
+- Apache-2.0 code license: ready.
+- CC-BY-4.0 documentation/design notice: ready.
 - Real BossConsole PR evidence test: passing.
 - Hack Apertus Devpost registration: complete.
 - Apertus inference endpoint: pending access/configuration.
