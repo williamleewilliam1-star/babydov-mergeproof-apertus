@@ -15,13 +15,15 @@ A GitHub achievement or merged PR is useful reputation, but non-technical review
 
 ## Apertus role
 
-Set an OpenAI-compatible Apertus endpoint:
+Set an OpenAI-compatible Apertus endpoint. The hackathon-ready example uses the official CSCS managed inference service:
 
 ```bash
-APERTUS_BASE_URL=http://localhost:8000/v1
+APERTUS_BASE_URL=https://api.inference.cscs.ch/v1
 APERTUS_MODEL=swiss-ai/Apertus-v1.5-8B
-APERTUS_API_KEY=
+APERTUS_API_KEY=your_server_side_key
 ```
+
+The same adapter can point at a local or other sovereign OpenAI-compatible Apertus deployment without code changes.
 
 When the endpoint is unavailable, MergeProof still returns a deterministic evidence-only fallback. That fallback is intentionally limited and is not presented as model output.
 
