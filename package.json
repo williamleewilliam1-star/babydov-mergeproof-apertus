@@ -6,7 +6,8 @@
   "description": "Evidence-first multilingual open-source contribution dossiers powered by Apertus.",
   "scripts": {
     "test": "node --test",
-    "dev": "node dev-server.js"
+    "dev": "node dev-server.js",
+    "eval:live": "node scripts/live-eval.mjs"
   },
   "engines": {
     "node": ">=20"
