@@ -61,4 +61,5 @@ The planned Apertus-specific evaluation asks whether multilingual synthesis pres
 
 ## License
 
-MIT
+- Source code: Apache License 2.0 (`Apache-2.0`).
+- Documentation, designs, and other non-code hackathon materials: Creative Commons Attribution 4.0 (`CC-BY-4.0`).
