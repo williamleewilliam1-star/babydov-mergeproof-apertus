@@ -4,6 +4,7 @@ import {
   fallbackAnalysis,
   parseJsonText,
   parsePullRequestUrl,
+  releaseMentionsPullRequest,
   sanitizeAnalysis
 } from "../src/core.js";
 
@@ -49,12 +50,9 @@ async function collectEvidence(ref) {
 
   let releases = [];
   try { releases = await gh(`${prefix}/releases?per_page=30`); } catch {}
-  const needleA = `#${ref.number}`;
-  const needleB = `/${ref.repo}/pull/${ref.number}`;
-  const release_matches = releases.filter(r => {
-    const body = String(r.body || "");
-    return body.includes(needleA) || body.includes(needleB);
-  }).map(r => ({
+  const release_matches = releases.filter(r =>
+    releaseMentionsPullRequest(r.body, ref.repo, ref.number)
+  ).map(r => ({
     tag: r.tag_name,
     name: r.name,
     published_at: r.published_at,
