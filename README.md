@@ -23,9 +23,15 @@ APERTUS_MODEL=swiss-ai/Apertus-v1.5-8B
 APERTUS_API_KEY=your_server_side_key
 ```
 
-The same adapter can point at a local or other sovereign OpenAI-compatible Apertus deployment without code changes.
+The same adapter can point at Public AI or a local/sovereign OpenAI-compatible Apertus deployment without code changes. See `docs/DEPLOYMENT.md`.
 
 When the endpoint is unavailable, MergeProof still returns a deterministic evidence-only fallback. That fallback is intentionally limited and is not presented as model output.
+
+## Measured evidence pipeline
+
+A reproducible 5-run benchmark against the real BossConsole PR #1681 is committed at `artifacts/benchmark-bossconsole-1681.json`.
+
+The recorded run produced stable facts in all five collections, a 1,060-byte compact evidence packet, and median public GitHub collection latency of 1,127.70 ms. Full methodology and limitations are in `docs/TECHNICAL_REPORT.md`.
 
 ## Local run
 

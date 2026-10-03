@@ -81,18 +81,20 @@ Apertus translates technical repository evidence into a contributor dossier for 
 
 ### Technical rigour
 - GitHub is the source of truth.
-- Invalid model evidence references are rejected.
+- Invalid model evidence references are rejected down to the cited field.
 - Merge status is deterministic.
 - Optional server-side GitHub token raises rate limits without exposing credentials.
 - Network calls use explicit timeouts.
-- Unit, integration, and live public-PR tests exist.
+- Unit, integration, multilingual grounding, and real public-PR tests exist.
+- Five benchmark runs against BossConsole #1681 returned the same merge/file/issue/release facts.
 
 ### Value, cost & scalability
 - Stateless request/response architecture.
 - No database required for the MVP.
 - Public GitHub calls can run anonymously; a server token is optional.
-- 8B Apertus is sufficient for constrained synthesis because evidence collection is deterministic.
-- Model prompt receives compact evidence rather than full repositories.
+- The demonstrated compact evidence packet is 1,060 bytes rather than a full repository.
+- Five anonymous GitHub collections measured 990.58 ms min / 1,127.70 ms median / 4,568.08 ms max.
+- Apertus 1.5 8B is the target live model; its multilingual quality/latency remains explicitly pending live provider access.
 
 ### Sovereign deployability
 - Apertus endpoint is configurable.
@@ -110,6 +112,9 @@ The remaining deployment task is connecting an Apertus inference endpoint and pu
 - Apache-2.0 code license: ready.
 - CC-BY-4.0 documentation/design notice: ready.
 - Real BossConsole PR evidence test: passing.
+- Real BossConsole 5-run evidence benchmark: stable; artifact committed.
+- Technical report: ready.
+- CSCS / Public AI / local Apertus provider adapters: ready.
 - Hack Apertus Devpost registration: complete.
-- Apertus inference endpoint: pending access/configuration.
+- Live Apertus API key and multilingual inference measurements: pending.
 - External live deployment: pending.
