@@ -84,6 +84,7 @@ check(
 const readme = await text("README.md");
 check("readme_apertus", /Apertus/i.test(readme), "README explains the Apertus role.");
 check("sovereign_path", /sovereign/i.test(readme) || /sovereign/i.test(await text("docs/DEPLOYMENT.md")), "A sovereign deployment path is documented.");
+check("public_demo", readme.includes("https://williamleewilliam1-star.github.io/babydov-mergeproof-apertus/"), "Public recorded-evidence demo URL is documented.");
 
 const failed = checks.filter(item => !item.ok);
 const result = {

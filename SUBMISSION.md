@@ -122,5 +122,6 @@ The remaining deployment task is connecting an Apertus inference endpoint and pu
 - CSCS / Public AI / local Apertus provider adapters: ready.
 - Hack Apertus Devpost registration: complete.
 - Local Apertus 1.5 multilingual live evaluation: complete; four-language measurements and machine-readable artifact committed.
+- Public recorded-evidence demo: deployed at https://williamleewilliam1-star.github.io/babydov-mergeproof-apertus/ and verified over HTTPS.
 - Official/hosted organizer-facing Apertus rerun: pending only if credentials become available before submission.
-- External live deployment: pending.
+- Interactive hosted live-inference endpoint: optional/pending; the public evidence demo does not pretend to be one.

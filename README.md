@@ -10,6 +10,14 @@ The trust boundary is explicit:
 - Model-written technical summaries and portfolio statements need their own supporting evidence refs or are replaced.
 - Missing evidence stays unknown instead of becoming a confident story.
 
+## Public evidence demo
+
+Recorded, reproducible Apertus evidence is published at:
+
+https://williamleewilliam1-star.github.io/babydov-mergeproof-apertus/
+
+The public page renders the committed real Apertus 1.5 multilingual evaluation and evidence benchmark. It is explicitly labeled as a recorded evidence demo, not a simulated live inference endpoint.
+
 ## Why this exists
 
 A GitHub achievement or merged PR is useful reputation, but non-technical reviewers often cannot tell what the contribution actually proves. MergeProof converts public repository evidence into a portable, multilingual proof-of-work summary without inventing payment, impact, security severity or release inclusion.
