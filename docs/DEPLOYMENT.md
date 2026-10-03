@@ -20,11 +20,24 @@ Health check:
 npm run verify:apertus
 ```
 
-The preflight accepts either `APERTUS_API_KEY` or the official CSCS variable `CSCS_INFERENCE_API_KEY`. It checks `/v1/models` and fails if the configured model is unavailable.
+The preflight accepts `APERTUS_API_KEY`, the official CSCS variable `CSCS_INFERENCE_API_KEY`, or `PUBLICAI_API_KEY`. It checks `/v1/models` and fails if the configured model is unavailable.
 
 The configured model should appear in the returned model list before enabling the demo.
 
-## Option B — local / sovereign Apertus
+## Option B — Public AI (fast demo path)
+
+Public AI exposes an OpenAI-compatible Apertus endpoint and is useful for a lightweight hackathon demo:
+
+```bash
+APERTUS_BASE_URL=https://api.publicai.co/v1
+APERTUS_MODEL=swiss-ai/apertus-v1.5-8b
+PUBLICAI_API_KEY=<server-side secret>
+npm run verify:apertus
+```
+
+Public AI requires a User-Agent header; MergeProof sends one automatically. The key remains server-side.
+
+## Option C — local / sovereign Apertus
 
 Any OpenAI-compatible Apertus endpoint can be used without changing application code:
 

@@ -127,3 +127,69 @@ test("GitHub evidence + Apertus synthesis stays grounded", async () => {
     else process.env.APERTUS_API_KEY = oldKey;
   }
 });
+
+test("Public AI key alias sends auth and required User-Agent", async () => {
+  const oldFetch = globalThis.fetch;
+  const oldBase = process.env.APERTUS_BASE_URL;
+  const oldModel = process.env.APERTUS_MODEL;
+  const oldApertus = process.env.APERTUS_API_KEY;
+  const oldCscs = process.env.CSCS_INFERENCE_API_KEY;
+  const oldPublic = process.env.PUBLICAI_API_KEY;
+
+  process.env.APERTUS_BASE_URL = "https://api.publicai.test/v1";
+  process.env.APERTUS_MODEL = "swiss-ai/apertus-v1.5-8b";
+  delete process.env.APERTUS_API_KEY;
+  delete process.env.CSCS_INFERENCE_API_KEY;
+  process.env.PUBLICAI_API_KEY = "publicai-test-key";
+
+  const evidence = {
+    pr: {
+      merged: true, merged_at: "2026-10-03T00:00:00Z",
+      owner: "o", repo: "r", title: "Merged PR",
+      changed_files: 1, additions: 2, deletions: 0
+    },
+    files: [], linked_issues: [], release_matches: []
+  };
+  globalThis.fetch = async (input, init = {}) => {
+    const url = new URL(String(input));
+    assert.equal(url.host, "api.publicai.test");
+    assert.equal(url.pathname, "/v1/chat/completions");
+    assert.equal(init.headers.authorization, "Bearer publicai-test-key");
+    assert.equal(init.headers["user-agent"], "BABYDOV-MergeProof/0.2");
+    return json({
+      model: "swiss-ai/apertus-v1.5-8b",
+      choices: [{
+        message: {
+          content: JSON.stringify({
+            status: "MERGED",
+            language: "English",
+            technical_summary: "Grounded summary",
+            portfolio_statement: "Grounded portfolio statement",
+            claims: [{ claim: "Merged", evidence_refs: ["pr.merged"] }],
+            caveats: []
+          })
+        }
+      }]
+    });
+  };
+
+  try {
+    const result = await apertureAnalyze(evidence, "English");
+    assert.equal(result.mode, "apertus");
+    assert.equal(result.model, "swiss-ai/apertus-v1.5-8b");
+    assert.equal(result.analysis.status, "MERGED");
+    assert.deepEqual(result.analysis.claims[0].evidence_refs, ["pr.merged"]);
+  } finally {
+    globalThis.fetch = oldFetch;
+    if (oldBase === undefined) delete process.env.APERTUS_BASE_URL;
+    else process.env.APERTUS_BASE_URL = oldBase;
+    if (oldModel === undefined) delete process.env.APERTUS_MODEL;
+    else process.env.APERTUS_MODEL = oldModel;
+    if (oldApertus === undefined) delete process.env.APERTUS_API_KEY;
+    else process.env.APERTUS_API_KEY = oldApertus;
+    if (oldCscs === undefined) delete process.env.CSCS_INFERENCE_API_KEY;
+    else process.env.CSCS_INFERENCE_API_KEY = oldCscs;
+    if (oldPublic === undefined) delete process.env.PUBLICAI_API_KEY;
+    else process.env.PUBLICAI_API_KEY = oldPublic;
+  }
+});

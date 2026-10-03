@@ -99,8 +99,16 @@ export async function apertureAnalyze(evidence, language) {
     analysis: fallbackAnalysis(evidence, language)
   };
 
-  const headers = { "content-type": "application/json" };
-  const key = String(process.env.APERTUS_API_KEY || process.env.CSCS_INFERENCE_API_KEY || "").trim();
+  const headers = {
+    "content-type": "application/json",
+    "user-agent": "BABYDOV-MergeProof/0.2"
+  };
+  const key = String(
+    process.env.APERTUS_API_KEY ||
+    process.env.CSCS_INFERENCE_API_KEY ||
+    process.env.PUBLICAI_API_KEY ||
+    ""
+  ).trim();
   if (key) headers.authorization = `Bearer ${key}`;
   const response = await fetch(`${base}/chat/completions`, {
     method: "POST",
