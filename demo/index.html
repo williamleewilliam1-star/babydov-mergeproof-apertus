@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MergeProof — verified Apertus evidence demo</title>
+  <meta name="description" content="Recorded, reproducible evidence from MergeProof's real Apertus 1.5 evaluation.">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div class="kicker">HACK APERTUS · TRACK 2B</div>
+      <h1>MergeProof</h1>
+      <p class="lede">A multilingual contributor dossier where GitHub owns the facts and Apertus explains them.</p>
+      <div class="notice"><strong>Recorded evidence demo.</strong> This page renders a committed real Apertus 1.5 evaluation artifact. It does not pretend to be a live hosted inference endpoint.</div>
+    </header>
+
+    <section class="panel">
+      <div class="label">VERIFIED EXTERNAL CONTRIBUTION</div>
+      <h2>BossConsole PR #1681</h2>
+      <div id="pr-facts" class="metrics"></div>
+      <div class="actions">
+        <a href="https://github.com/risa-labs-inc/BossConsole/pull/1681" target="_blank" rel="noreferrer">Open source PR ↗</a>
+        <a href="https://github.com/williamleewilliam1-star/babydov-mergeproof-apertus" target="_blank" rel="noreferrer">Open MergeProof ↗</a>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="label">REAL APERTUS 1.5 RUN</div>
+      <h2>Multilingual grounding</h2>
+      <div id="languages" class="language-grid"></div>
+      <p id="model" class="muted"></p>
+    </section>
+
+    <section class="panel">
+      <div class="label">INVARIANTS</div>
+      <h2>Facts stay outside the model</h2>
+      <div id="invariants" class="invariant-grid"></div>
+    </section>
+
+    <section class="panel">
+      <div class="label">REPRODUCIBILITY</div>
+      <h2>Measured evidence collection</h2>
+      <div id="benchmark" class="metrics"></div>
+      <p class="muted">Artifacts published with this demo are copied directly from the repository at build time.</p>
+    </section>
+
+    <footer>
+      <span>MergeProof · BABYDOV</span>
+      <span>Apache-2.0 code · CC-BY-4.0 docs</span>
+    </footer>
+  </main>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

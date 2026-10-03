@@ -1,0 +1,45 @@
+name: Evidence Demo Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "demo/**"
+      - "artifacts/live-eval-local-apertus-mxfp4-20261003.json"
+      - "artifacts/benchmark-bossconsole-1681.json"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build evidence-only site
+        run: |
+          mkdir -p _site
+          cp demo/index.html demo/app.js demo/style.css _site/
+          cp artifacts/live-eval-local-apertus-mxfp4-20261003.json _site/live-eval.json
+          cp artifacts/benchmark-bossconsole-1681.json _site/benchmark.json
+          test ! -e _site/.env
+          find _site -maxdepth 1 -type f -print
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
