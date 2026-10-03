@@ -121,5 +121,6 @@ The remaining deployment task is connecting an Apertus inference endpoint and pu
 - Technical report: ready.
 - CSCS / Public AI / local Apertus provider adapters: ready.
 - Hack Apertus Devpost registration: complete.
-- Live Apertus API key and multilingual inference measurements: pending.
+- Local Apertus 1.5 multilingual live evaluation: complete; four-language measurements and machine-readable artifact committed.
+- Official/hosted organizer-facing Apertus rerun: pending only if credentials become available before submission.
 - External live deployment: pending.
