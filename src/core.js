@@ -80,15 +80,18 @@ export function fallbackAnalysis(evidence, language = "English") {
 }
 
 
-function evidenceRefExists(ref, evidence) {
+export function evidenceRefExists(ref, evidence) {
   if (/^pr\.[a-z_]+$/.test(ref)) {
     const key = ref.slice(3);
     return Object.prototype.hasOwnProperty.call(evidence.pr || {}, key);
   }
-  const m = ref.match(/^(files|linked_issues|release_matches)\[(\d+)\](?:\.[a-z_]+)?$/);
+  const m = ref.match(/^(files|linked_issues|release_matches)\[(\d+)\](?:\.([a-z_]+))?$/);
   if (!m) return false;
   const rows = evidence[m[1]] || [];
-  return Number(m[2]) < rows.length;
+  const row = rows[Number(m[2])];
+  if (!row) return false;
+  const key = m[3];
+  return !key || Object.prototype.hasOwnProperty.call(row, key);
 }
 
 export function sanitizeAnalysis(input, evidence, language = "English") {

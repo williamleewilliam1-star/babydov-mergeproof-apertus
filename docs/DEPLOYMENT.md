@@ -17,9 +17,10 @@ The API key must remain server-side. MergeProof never sends it to the browser.
 Health check:
 
 ```bash
-curl -sS "$APERTUS_BASE_URL/models" \
-  -H "Authorization: Bearer $APERTUS_API_KEY"
+npm run verify:apertus
 ```
+
+The preflight accepts either `APERTUS_API_KEY` or the official CSCS variable `CSCS_INFERENCE_API_KEY`. It checks `/v1/models` and fails if the configured model is unavailable.
 
 The configured model should appear in the returned model list before enabling the demo.
 
