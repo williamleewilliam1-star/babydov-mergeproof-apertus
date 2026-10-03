@@ -4,9 +4,9 @@
 
 MergeProof separates repository facts from model synthesis.
 
-The deterministic layer collects a public GitHub pull request, changed files, linked issues and release references. Apertus receives only a compact evidence packet. Model claims are accepted only when their `evidence_refs` resolve to real fields in that packet.
+The deterministic layer collects a public GitHub pull request, changed files, linked issues and release references. Apertus receives only a compact evidence packet. Model claims are accepted only when their `evidence_refs` resolve to real fields in that packet. The free-text `technical_summary` and `portfolio_statement` must also carry their own valid evidence refs; otherwise MergeProof replaces them with evidence-backed fallback text.
 
-This design keeps merge state and release evidence outside the language model.
+This design keeps merge state, release evidence, and the final grounding gate outside the language model.
 
 ## Real external benchmark
 
@@ -50,7 +50,9 @@ The automated suite verifies that:
 2. model claims without evidence refs are removed;
 3. refs to nonexistent paths are removed;
 4. a ref such as `files[0].nonexistent` is invalid even when `files[0]` exists;
-5. the same grounding rules hold for English, German, French and Russian.
+5. model-written technical summaries without valid refs are replaced;
+6. model-written portfolio statements without valid refs are replaced;
+7. the same grounding rules hold for English, German, French and Russian.
 ## Apertus deployment
 
 MergeProof supports three OpenAI-compatible Apertus paths without changing application logic:

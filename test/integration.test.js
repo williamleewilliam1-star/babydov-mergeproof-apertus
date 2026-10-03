@@ -85,7 +85,9 @@ test("GitHub evidence + Apertus synthesis stays grounded", async () => {
               status: "NOT_MERGED",
               language: "German",
               technical_summary: "Apertus summary",
+              technical_summary_refs: ["pr.merged", "files[0]"],
               portfolio_statement: "Apertus portfolio statement",
+              portfolio_statement_refs: ["pr.merged", "pr.author"],
               claims: [
                 { claim: "Merged contribution", evidence_refs: ["pr.merged"] },
                 { claim: "Paid $500", evidence_refs: ["payments.confirmed"] }
@@ -108,6 +110,10 @@ test("GitHub evidence + Apertus synthesis stays grounded", async () => {
     const result = await apertureAnalyze(evidence, "German");
     assert.equal(result.mode, "apertus");
     assert.equal(result.analysis.status, "MERGED");
+    assert.equal(result.analysis.technical_summary, "Apertus summary");
+    assert.equal(result.analysis.portfolio_statement, "Apertus portfolio statement");
+    assert.equal(result.analysis.grounding.technical_summary_grounded, true);
+    assert.equal(result.analysis.grounding.portfolio_statement_grounded, true);
     assert.equal(result.analysis.claims.length, 1);
     assert.equal(result.analysis.claims[0].claim, "Merged contribution");
     assert.equal(result.analysis.grounding.rejected_claims, 1);
@@ -164,7 +170,9 @@ test("Public AI key alias sends auth and required User-Agent", async () => {
             status: "MERGED",
             language: "English",
             technical_summary: "Grounded summary",
+            technical_summary_refs: ["pr.merged"],
             portfolio_statement: "Grounded portfolio statement",
+            portfolio_statement_refs: ["pr.merged"],
             claims: [{ claim: "Merged", evidence_refs: ["pr.merged"] }],
             caveats: []
           })

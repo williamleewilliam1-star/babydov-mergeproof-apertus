@@ -7,6 +7,7 @@ The trust boundary is explicit:
 - GitHub supplies merge state, diff statistics, changed files, linked issues and release-note references.
 - Apertus supplies multilingual synthesis.
 - Every generated claim must retain evidence references.
+- Model-written technical summaries and portfolio statements need their own supporting evidence refs or are replaced.
 - Missing evidence stays unknown instead of becoming a confident story.
 
 ## Why this exists
