@@ -7,7 +7,8 @@
   "scripts": {
     "test": "node --test",
     "dev": "node dev-server.js",
-    "eval:live": "node scripts/live-eval.mjs"
+    "eval:live": "node scripts/live-eval.mjs",
+    "verify:apertus": "node scripts/verify-apertus.mjs"
   },
   "engines": {
     "node": ">=20"

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs/promises";
 import { apertureAnalyze, collectEvidence } from "../api/analyze.js";
-import { parsePullRequestUrl } from "../src/core.js";
+import { evidenceRefExists, parsePullRequestUrl } from "../src/core.js";
 
 const prUrl = process.argv[2] || "https://github.com/risa-labs-inc/BossConsole/pull/1681";
 const outputPath = process.argv[3] || "";
@@ -21,8 +21,15 @@ for (const language of languages) {
   const result = await apertureAnalyze(evidence, language);
   const analysis = result.analysis || {};
   const claims = Array.isArray(analysis.claims) ? analysis.claims : [];
+  const invalidRefs = claims.flatMap(claim =>
+    Array.isArray(claim.evidence_refs)
+      ? claim.evidence_refs.filter(ref => !evidenceRefExists(ref, evidence))
+      : ["<missing evidence_refs>"]
+  );
   const invalid = claims.filter(claim =>
-    !Array.isArray(claim.evidence_refs) || claim.evidence_refs.length === 0
+    !Array.isArray(claim.evidence_refs) ||
+    claim.evidence_refs.length === 0 ||
+    claim.evidence_refs.some(ref => !evidenceRefExists(ref, evidence))
   );
 
   rows.push({
@@ -33,6 +40,7 @@ for (const language of languages) {
     status: analysis.status,
     claim_count: claims.length,
     unsupported_claims_after_sanitizer: invalid.length,
+    invalid_evidence_refs: invalidRefs,
     grounding: analysis.grounding || null,
     evidence_refs: claims.map(claim => claim.evidence_refs || [])
   });

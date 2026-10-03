@@ -60,3 +60,19 @@ test("sanitizer overrides model status and drops unsupported claims", () => {
   assert.equal(analysis.grounding.rejected_claims, 1);
   assert.match(analysis.caveats.join(" "), /removed/i);
 });
+
+test("evidence refs validate the cited field, not only the array row", async () => {
+  const { evidenceRefExists } = await import("../src/core.js");
+  const evidence = {
+    pr: { merged: true },
+    files: [{ filename: "src/a.js", additions: 2 }],
+    linked_issues: [{ number: 7 }],
+    release_matches: [{ tag: "v1.0.0" }]
+  };
+  assert.equal(evidenceRefExists("pr.merged", evidence), true);
+  assert.equal(evidenceRefExists("files[0]", evidence), true);
+  assert.equal(evidenceRefExists("files[0].filename", evidence), true);
+  assert.equal(evidenceRefExists("files[0].nonexistent", evidence), false);
+  assert.equal(evidenceRefExists("release_matches[0].tag", evidence), true);
+  assert.equal(evidenceRefExists("release_matches[1].tag", evidence), false);
+});
