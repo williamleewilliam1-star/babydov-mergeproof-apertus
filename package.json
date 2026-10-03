@@ -8,7 +8,8 @@
     "test": "node --test",
     "dev": "node dev-server.js",
     "eval:live": "node scripts/live-eval.mjs",
-    "verify:apertus": "node scripts/verify-apertus.mjs"
+    "verify:apertus": "node scripts/verify-apertus.mjs",
+    "benchmark:evidence": "node scripts/benchmark-evidence.mjs"
   },
   "engines": {
     "node": ">=20"
