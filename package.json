@@ -9,7 +9,8 @@
     "dev": "node dev-server.js",
     "eval:live": "node scripts/live-eval.mjs",
     "verify:apertus": "node scripts/verify-apertus.mjs",
-    "benchmark:evidence": "node scripts/benchmark-evidence.mjs"
+    "benchmark:evidence": "node scripts/benchmark-evidence.mjs",
+    "submission:check": "node scripts/submission-preflight.mjs"
   },
   "engines": {
     "node": ">=20"

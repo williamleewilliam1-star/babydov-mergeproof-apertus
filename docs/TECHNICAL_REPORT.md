@@ -83,17 +83,21 @@ This is a community MLX quantization of Apertus 1.5 8B used for local compatibil
 
 The local build defaults to deliberation. MergeProof therefore supports the optional server-side setting `APERTUS_ENABLE_THINKING=false`; hosted providers are unchanged when that variable is omitted.
 
-Measured BossConsole #1681 run:
+Fresh reproducible BossConsole #1681 run on the current hardened code:
 
+- runtime: `mlx-lm 0.31.3`, loopback OpenAI-compatible server, thinking disabled;
 - languages: English, German, French, Russian;
 - status invariant: **MERGED in 4/4 languages**;
 - accepted claims with invalid refs after sanitizer: **0**;
 - invalid evidence refs: **0**;
-- format-repair usage in the successful run: **0/4**;
-- latency: English **17,091 ms**, German **10,436 ms**, French **12,773 ms**, Russian **12,871 ms**;
-- median language latency: **12,822 ms**.
+- unsupported narrative fields after sanitizer: **0**;
+- grounded technical summary + portfolio statement: **4/4 languages**;
+- format-repair usage: **0/4**;
+- latency: English **17,498 ms**, German **13,373 ms**, French **12,807 ms**, Russian **20,286 ms**;
+- median language latency: **15,435.5 ms**.
 
 Machine-readable result: `artifacts/live-eval-local-apertus-mxfp4-20261003.json`.
+Artifact SHA-256: `19f377882a0ddbc14176188de71dad0381690118029e34002d7f8ef8fdb65543`.
 
 During compatibility work, an earlier Russian response produced malformed JSON. MergeProof now permits exactly one syntax/structure repair pass through the same Apertus model, after which the ordinary evidence sanitizer remains authoritative. A second malformed result still fails explicitly; the repair path is not a factual fallback.
 
