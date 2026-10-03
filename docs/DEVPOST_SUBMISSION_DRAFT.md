@@ -117,6 +117,11 @@ npm run eval:live -- "https://github.com/risa-labs-inc/BossConsole/pull/1681"
 - Final organizer-facing hosted inference should be repeated on the intended official/hosted Apertus endpoint if credentials are available before submission.
 - Public GitHub API access is rate-limited; an optional server-side token can raise limits.
 - MergeProof proves only what its evidence schema contains. It intentionally does not establish payment, bounty acceptance, security severity, or business impact.
+## Public demo
+https://williamleewilliam1-star.github.io/babydov-mergeproof-apertus/
+
+This is a recorded evidence demo backed by the committed real Apertus evaluation artifact. It is intentionally not labeled as a live hosted inference endpoint.
+
 ## Repository
 https://github.com/williamleewilliam1-star/babydov-mergeproof-apertus
 
@@ -139,4 +144,5 @@ https://github.com/williamleewilliam1-star/babydov-mergeproof-apertus
 - [x] Multilingual grounding tests
 - [x] Sovereign deployment documentation
 - [x] Automated submission preflight
+- [x] Public recorded-evidence demo over HTTPS
 - [ ] Final hosted/official Apertus run, if credentials become available
