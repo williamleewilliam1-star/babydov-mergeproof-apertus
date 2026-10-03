@@ -31,6 +31,24 @@ for (const language of languages) {
     claim.evidence_refs.length === 0 ||
     claim.evidence_refs.some(ref => !evidenceRefExists(ref, evidence))
   );
+  const narratives = [
+    {
+      field: "technical_summary",
+      text: analysis.technical_summary,
+      refs: analysis.technical_summary_refs
+    },
+    {
+      field: "portfolio_statement",
+      text: analysis.portfolio_statement,
+      refs: analysis.portfolio_statement_refs
+    }
+  ];
+  const invalidNarratives = narratives.filter(item =>
+    !item.text ||
+    !Array.isArray(item.refs) ||
+    item.refs.length === 0 ||
+    item.refs.some(ref => !evidenceRefExists(ref, evidence))
+  );
 
   rows.push({
     language,
@@ -41,14 +59,16 @@ for (const language of languages) {
     claim_count: claims.length,
     unsupported_claims_after_sanitizer: invalid.length,
     invalid_evidence_refs: invalidRefs,
+    unsupported_narratives_after_sanitizer: invalidNarratives.map(item => item.field),
     grounding: analysis.grounding || null,
-    evidence_refs: claims.map(claim => claim.evidence_refs || [])
+    evidence_refs: claims.map(claim => claim.evidence_refs || []),
+    narrative_refs: Object.fromEntries(narratives.map(item => [item.field, item.refs || []]))
   });
 }
 
 const expectedStatus = evidence.pr.merged ? "MERGED" : "NOT_MERGED";
 const report = {
-  schema: "mergeproof.live_eval.v1",
+  schema: "mergeproof.live_eval.v2",
   generated_at: new Date().toISOString(),
   pr: {
     url: evidence.pr.url,
@@ -61,7 +81,8 @@ const report = {
   invariant: {
     expected_status: expectedStatus,
     all_languages_status_stable: rows.every(row => row.status === expectedStatus),
-    all_claims_have_refs: rows.every(row => row.unsupported_claims_after_sanitizer === 0)
+    all_claims_have_refs: rows.every(row => row.unsupported_claims_after_sanitizer === 0),
+    all_narratives_have_refs: rows.every(row => row.unsupported_narratives_after_sanitizer.length === 0)
   },
   runs: rows
 };
@@ -73,6 +94,10 @@ if (outputPath) {
 }
 process.stdout.write(rendered);
 
-if (!report.invariant.all_languages_status_stable || !report.invariant.all_claims_have_refs) {
+if (
+  !report.invariant.all_languages_status_stable ||
+  !report.invariant.all_claims_have_refs ||
+  !report.invariant.all_narratives_have_refs
+) {
   process.exitCode = 3;
 }

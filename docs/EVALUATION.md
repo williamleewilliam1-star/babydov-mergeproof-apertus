@@ -35,8 +35,10 @@ Expected sanitizer behavior:
 
 - merge status is overwritten from GitHub evidence;
 - both valid claims survive with their evidence refs;
+- model-written technical summary and portfolio statement survive only when each carries its own valid evidence refs;
 - the payment claim is removed;
-- the grounding report counts one rejected claim.
+- unsupported narrative text is replaced with evidence-backed fallback text;
+- the grounding report records rejected claims plus narrative-grounding status.
 
 A second test uses an unmerged evidence packet while the simulated model says `MERGED`.
 The final status must remain `NOT_MERGED`.

@@ -27,8 +27,10 @@ The system deliberately constrains Apertus:
 2. Compact that evidence into a bounded JSON packet.
 3. Ask Apertus for a structured multilingual explanation.
 4. Require every model claim to carry one or more `evidence_refs`.
-5. Reject model claims whose evidence reference does not exist.
-6. Override model merge status with the GitHub source of truth.
+5. Require `technical_summary` and `portfolio_statement` to carry their own supporting evidence refs.
+6. Replace unsupported narrative text with evidence-backed fallback text.
+7. Reject model claims whose evidence reference does not exist.
+8. Override model merge status with the GitHub source of truth.
 
 The model is useful because the audience may speak another language or may not read code.
 The model is not trusted to rewrite repository history.
@@ -82,6 +84,9 @@ Apertus translates technical repository evidence into a contributor dossier for 
 ### Technical rigour
 - GitHub is the source of truth.
 - Invalid model evidence references are rejected down to the cited field.
+- Merge claims must agree with the boolean GitHub source of truth.
+- Release claims require a concrete fetched release-match reference.
+- Payment/bounty claims are rejected because payment evidence is intentionally outside this evidence schema.
 - Merge status is deterministic.
 - Optional server-side GitHub token raises rate limits without exposing credentials.
 - Network calls use explicit timeouts.
