@@ -44,20 +44,23 @@ test("sanitizer overrides model status and drops unsupported claims", () => {
   };
   const analysis = sanitizeAnalysis({
     status: "NOT_MERGED",
-    language: "German",
+    language: "Python",
     technical_summary: "Model summary",
     portfolio_statement: "Model portfolio line",
     claims: [
-      { claim: "Merged", evidence_refs: ["pr.merged"] },
+      { claim: "Merged", evidence_refs: [{ path: "pr.merged" }] },
       { claim: "Paid bounty", evidence_refs: ["payments.confirmed"] }
     ],
-    caveats: []
+    caveats: "Model caveat"
   }, evidence, "German");
 
   assert.equal(analysis.status, "MERGED");
+  assert.equal(analysis.language, "German");
   assert.equal(analysis.claims.length, 1);
   assert.equal(analysis.claims[0].claim, "Merged");
+  assert.deepEqual(analysis.claims[0].evidence_refs, ["pr.merged"]);
   assert.equal(analysis.grounding.rejected_claims, 1);
+  assert.match(analysis.caveats.join(" "), /Model caveat/);
   assert.match(analysis.caveats.join(" "), /removed/i);
 });
 
@@ -76,8 +79,12 @@ test("evidence refs validate the cited field, not only the array row", async () 
   assert.equal(evidenceRefExists("files[0]", evidence), true);
   assert.equal(evidenceRefExists("files[0].filename", evidence), true);
   assert.equal(evidenceRefExists("files[0].nonexistent", evidence), false);
+  assert.equal(evidenceRefExists("files", evidence), true);
+  assert.equal(evidenceRefExists("linked_issues", evidence), true);
+  assert.equal(evidenceRefExists("release_matches", evidence), true);
   assert.equal(evidenceRefExists("release_matches[0].tag", evidence), true);
   assert.equal(evidenceRefExists("release_matches[1].tag", evidence), false);
+  assert.equal(evidenceRefExists("release_matches", { ...evidence, release_matches: [] }), false);
 });
 test("release matching is exact and avoids numeric-prefix false positives", () => {
   assert.equal(releaseMentionsPullRequest("Shipped in #1681.", "BossConsole", 1681), true);

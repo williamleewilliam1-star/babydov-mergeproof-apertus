@@ -15,11 +15,13 @@ test("GitHub evidence + Apertus synthesis stays grounded", async () => {
   const oldBase = process.env.APERTUS_BASE_URL;
   const oldModel = process.env.APERTUS_MODEL;
   const oldKey = process.env.APERTUS_API_KEY;
+  const oldThinking = process.env.APERTUS_ENABLE_THINKING;
 
   process.env.GITHUB_TOKEN = "gh-test-token";
   process.env.APERTUS_BASE_URL = "https://apertus.test/v1";
   process.env.APERTUS_MODEL = "swiss-ai/Apertus-v1.5-8B";
   process.env.APERTUS_API_KEY = "apertus-test-key";
+  process.env.APERTUS_ENABLE_THINKING = "false";
 
   const calls = [];
   globalThis.fetch = async (input, init = {}) => {
@@ -77,6 +79,7 @@ test("GitHub evidence + Apertus synthesis stays grounded", async () => {
     if (url.host === "apertus.test") {
       assert.equal(url.pathname, "/v1/chat/completions");
       assert.equal(init.headers.authorization, "Bearer apertus-test-key");
+      assert.deepEqual(JSON.parse(init.body).chat_template_kwargs, { enable_thinking: false });
       return json({
         model: "swiss-ai/Apertus-v1.5-8B",
         choices: [{
@@ -131,6 +134,8 @@ test("GitHub evidence + Apertus synthesis stays grounded", async () => {
     else process.env.APERTUS_MODEL = oldModel;
     if (oldKey === undefined) delete process.env.APERTUS_API_KEY;
     else process.env.APERTUS_API_KEY = oldKey;
+    if (oldThinking === undefined) delete process.env.APERTUS_ENABLE_THINKING;
+    else process.env.APERTUS_ENABLE_THINKING = oldThinking;
   }
 });
 
@@ -199,5 +204,79 @@ test("Public AI key alias sends auth and required User-Agent", async () => {
     else process.env.CSCS_INFERENCE_API_KEY = oldCscs;
     if (oldPublic === undefined) delete process.env.PUBLICAI_API_KEY;
     else process.env.PUBLICAI_API_KEY = oldPublic;
+  }
+});
+test("malformed Apertus JSON gets exactly one same-model syntax repair", async () => {
+  const oldFetch = globalThis.fetch;
+  const oldBase = process.env.APERTUS_BASE_URL;
+  const oldModel = process.env.APERTUS_MODEL;
+  const oldKey = process.env.APERTUS_API_KEY;
+  const oldThinking = process.env.APERTUS_ENABLE_THINKING;
+
+  process.env.APERTUS_BASE_URL = "https://repair.test/v1";
+  process.env.APERTUS_MODEL = "swiss-ai/Apertus-v1.5-8B";
+  process.env.APERTUS_API_KEY = "repair-test-key";
+  process.env.APERTUS_ENABLE_THINKING = "false";
+
+  const evidence = {
+    pr: {
+      merged: true, merged_at: "2026-10-03T00:00:00Z",
+      owner: "o", repo: "r", title: "Merged PR",
+      changed_files: 1, additions: 2, deletions: 0
+    },
+    files: [{ filename: "src/a.js" }],
+    linked_issues: [],
+    release_matches: [{ tag: "v1.0.0" }]
+  };
+
+  let calls = 0;
+  globalThis.fetch = async (_input, init = {}) => {
+    calls += 1;
+    const body = JSON.parse(init.body);
+    assert.deepEqual(body.chat_template_kwargs, { enable_thinking: false });
+    if (calls === 1) {
+      return json({
+        model: "swiss-ai/Apertus-v1.5-8B",
+        choices: [{ message: {
+          content: '{"status":"MERGED","language":"English","technical_summary":"x","portfolio_statement":"y","claims":[{"claim":"Merged","evidence_refs":[{"path":"pr.merged"}]}],"caveats":[]'
+        }}]
+      });
+    }
+    assert.equal(calls, 2);
+    const repairPrompt = body.messages[1].content;
+    assert.match(repairPrompt, /<untrusted_model_output>/);
+    assert.match(body.messages[0].content, /Do not add facts/i);
+    return json({
+      model: "swiss-ai/Apertus-v1.5-8B",
+      choices: [{ message: {
+        content: JSON.stringify({
+          status: "MERGED",
+          language: "English",
+          technical_summary: "x",
+          portfolio_statement: "y",
+          claims: [{ claim: "Merged", evidence_refs: ["pr.merged"] }],
+          caveats: []
+        })
+      }}]
+    });
+  };
+
+  try {
+    const result = await apertureAnalyze(evidence, "English");
+    assert.equal(calls, 2);
+    assert.equal(result.format_repair, true);
+    assert.equal(result.analysis.status, "MERGED");
+    assert.deepEqual(result.analysis.claims[0].evidence_refs, ["pr.merged"]);
+    assert.equal(result.analysis.grounding.rejected_claims, 0);
+  } finally {
+    globalThis.fetch = oldFetch;
+    if (oldBase === undefined) delete process.env.APERTUS_BASE_URL;
+    else process.env.APERTUS_BASE_URL = oldBase;
+    if (oldModel === undefined) delete process.env.APERTUS_MODEL;
+    else process.env.APERTUS_MODEL = oldModel;
+    if (oldKey === undefined) delete process.env.APERTUS_API_KEY;
+    else process.env.APERTUS_API_KEY = oldKey;
+    if (oldThinking === undefined) delete process.env.APERTUS_ENABLE_THINKING;
+    else process.env.APERTUS_ENABLE_THINKING = oldThinking;
   }
 });
