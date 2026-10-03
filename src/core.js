@@ -98,12 +98,12 @@ export function fallbackAnalysis(evidence, language = "English") {
 
 
 export function evidenceRefExists(ref, evidence) {
-  if (["files", "linked_issues", "release_matches"].includes(ref)) {
-    return Array.isArray(evidence?.[ref]);
-  }
   if (/^pr\.[a-z_]+$/.test(ref)) {
     const key = ref.slice(3);
     return Object.prototype.hasOwnProperty.call(evidence.pr || {}, key);
+  }
+  if (/^(files|linked_issues|release_matches)$/.test(ref)) {
+    return Array.isArray(evidence[ref]) && evidence[ref].length > 0;
   }
   const m = ref.match(/^(files|linked_issues|release_matches)\[(\d+)\](?:\.([a-z_]+))?$/);
   if (!m) return false;
@@ -115,7 +115,13 @@ export function evidenceRefExists(ref, evidence) {
 }
 
 function resolveEvidenceRefs(value, evidence) {
-  const requested = Array.isArray(value) ? value.map(String) : [];
+  const requested = Array.isArray(value)
+    ? value.map(ref => {
+        if (typeof ref === "string") return ref;
+        if (ref && typeof ref === "object" && typeof ref.path === "string") return ref.path;
+        return "";
+      }).filter(Boolean)
+    : [];
   const valid = requested.filter(ref => evidenceRefExists(ref, evidence));
   return {
     requested,
@@ -208,7 +214,9 @@ export function sanitizeAnalysis(input, evidence, language = "English") {
 
   const caveats = Array.isArray(source.caveats)
     ? source.caveats.map(String).filter(Boolean)
-    : [];
+    : typeof source.caveats === "string" && source.caveats.trim()
+      ? [source.caveats.trim()]
+      : [];
   if (claims.length < rawClaims.length) {
     caveats.push("One or more model claims were removed because their evidence refs were missing, invalid, or inconsistent with the claim.");
   }
@@ -221,7 +229,7 @@ export function sanitizeAnalysis(input, evidence, language = "English") {
 
   return {
     status: evidence.pr?.merged ? "MERGED" : "NOT_MERGED",
-    language: String(source.language || language).slice(0, 80),
+    language: String(language || "English").slice(0, 80),
     technical_summary,
     technical_summary_refs: technicalRefs,
     portfolio_statement,

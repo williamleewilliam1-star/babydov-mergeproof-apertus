@@ -71,8 +71,32 @@ The language model does not ingest a full repository. It receives a bounded pack
 
 Public GitHub access works without credentials for low-volume demos; an optional server token can raise API rate limits without changing browser code.
 
-## Current limitation
+## Local Apertus 1.5 compatibility benchmark
 
-The evidence pipeline and deterministic grounding tests are complete and measured.
+On 2026-10-03, MergeProof was also exercised against a real local Apertus 1.5 model through an OpenAI-compatible MLX endpoint.
 
-Live Apertus multilingual latency/quality measurements remain **pending provider API access**. They will be recorded separately with `npm run eval:live`; this report does not fabricate model benchmark numbers before that run exists.
+Model used:
+
+`m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4`
+
+This is a community MLX quantization of Apertus 1.5 8B used for local compatibility testing. It is **not** the official CSCS managed endpoint, and the measurements below must not be presented as CSCS performance.
+
+The local build defaults to deliberation. MergeProof therefore supports the optional server-side setting `APERTUS_ENABLE_THINKING=false`; hosted providers are unchanged when that variable is omitted.
+
+Measured BossConsole #1681 run:
+
+- languages: English, German, French, Russian;
+- status invariant: **MERGED in 4/4 languages**;
+- accepted claims with invalid refs after sanitizer: **0**;
+- invalid evidence refs: **0**;
+- format-repair usage in the successful run: **0/4**;
+- latency: English **17,091 ms**, German **10,436 ms**, French **12,773 ms**, Russian **12,871 ms**;
+- median language latency: **12,822 ms**.
+
+Machine-readable result: `artifacts/live-eval-local-apertus-mxfp4-20261003.json`.
+
+During compatibility work, an earlier Russian response produced malformed JSON. MergeProof now permits exactly one syntax/structure repair pass through the same Apertus model, after which the ordinary evidence sanitizer remains authoritative. A second malformed result still fails explicitly; the repair path is not a factual fallback.
+
+## Remaining limitation
+
+The local benchmark proves the model boundary and multilingual grounding behavior on Apple Silicon, but final organizer-facing deployment should still be repeated on the intended hosted/official Apertus provider when those credentials are available.

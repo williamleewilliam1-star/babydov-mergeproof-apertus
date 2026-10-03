@@ -45,7 +45,11 @@ Any OpenAI-compatible Apertus endpoint can be used without changing application 
 APERTUS_BASE_URL=http://127.0.0.1:8000/v1
 APERTUS_MODEL=swiss-ai/Apertus-v1.5-8B
 APERTUS_API_KEY=
+# Only when the selected server/model defaults to deliberation:
+APERTUS_ENABLE_THINKING=false
 ```
+
+The optional thinking flag is omitted by default and therefore does not alter CSCS/Public AI requests. It was added after a local MLX Apertus 1.5 build spent its completion budget on reasoning before finishing JSON.
 
 This keeps GitHub evidence collection and model serving independently deployable.
 

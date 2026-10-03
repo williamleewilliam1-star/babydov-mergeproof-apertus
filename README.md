@@ -34,6 +34,8 @@ A reproducible 5-run benchmark against the real BossConsole PR #1681 is committe
 
 The recorded run produced stable facts in all five collections, a 1,060-byte compact evidence packet, and median public GitHub collection latency of 1,127.70 ms. Full methodology and limitations are in `docs/TECHNICAL_REPORT.md`.
 
+A second real compatibility benchmark ran Apertus 1.5 8B locally through MLX on the same PR in English, German, French and Russian. The successful run held `MERGED` stable in 4/4 languages with zero invalid evidence refs after sanitization. This is explicitly a local community-quantized Apertus compatibility result, not a CSCS performance claim.
+
 ## Local run
 
 ```bash

@@ -54,6 +54,7 @@ for (const language of languages) {
     language,
     mode: result.mode,
     model: result.model,
+    format_repair: Boolean(result.format_repair),
     duration_ms: Date.now() - started,
     status: analysis.status,
     claim_count: claims.length,
@@ -67,9 +68,19 @@ for (const language of languages) {
 }
 
 const expectedStatus = evidence.pr.merged ? "MERGED" : "NOT_MERGED";
+const endpointHost = new URL(process.env.APERTUS_BASE_URL).hostname;
+const endpointClass = ["127.0.0.1", "localhost", "::1"].includes(endpointHost)
+  ? "local-loopback"
+  : "hosted";
+const thinkingValue = String(process.env.APERTUS_ENABLE_THINKING || "").toLowerCase();
 const report = {
   schema: "mergeproof.live_eval.v2",
   generated_at: new Date().toISOString(),
+  runtime: {
+    endpoint_class: endpointClass,
+    model: rows[0]?.model || process.env.APERTUS_MODEL || null,
+    thinking_enabled: ["true", "1", "yes"].includes(thinkingValue)
+  },
   pr: {
     url: evidence.pr.url,
     merged: evidence.pr.merged,
