@@ -99,7 +99,7 @@ Apertus translates technical repository evidence into a contributor dossier for 
 - Public GitHub calls can run anonymously; a server token is optional.
 - The demonstrated compact evidence packet is 1,060 bytes rather than a full repository.
 - Five anonymous GitHub collections measured 990.58 ms min / 1,127.70 ms median / 4,568.08 ms max.
-- Apertus 1.5 8B is the target live model; its multilingual quality/latency remains explicitly pending live provider access.
+- A real local Apertus 1.5 8B MLX run measured multilingual quality and latency across English, German, French and Russian; official CSCS-hosted performance has not been measured.
 
 ### Sovereign deployability
 - Apertus endpoint is configurable.
@@ -109,7 +109,7 @@ Apertus translates technical repository evidence into a contributor dossier for 
 
 ### Implementation feasibility
 The GitHub evidence pipeline is already working on a real external repository.
-The remaining deployment task is connecting an Apertus inference endpoint and publishing the web demo.
+The real Apertus evaluation and public recorded-evidence demo are complete. An interactive hosted inference service remains optional; the public page does not claim to offer one.
 
 ## Current status
 

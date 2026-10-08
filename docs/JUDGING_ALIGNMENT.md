@@ -73,3 +73,13 @@ It processes user-selected public GitHub metadata on demand. The JSON files in `
 ## Remaining limitation
 
 The committed live evaluation proves local Apertus compatibility and sovereign deployability. A final organizer-facing run on the intended hosted/official Apertus endpoint should be repeated if credentials become available before submission.
+
+## Judge quickstart
+
+1. Open the [public recorded-evidence demo](https://williamleewilliam1-star.github.io/babydov-mergeproof-apertus/). It presents actual local Apertus evaluation records, not an interactive hosted model.
+2. Inspect `artifacts/live-eval-local-apertus-mxfp4-20261003.json` for four-language results and `artifacts/benchmark-bossconsole-1681.json` for deterministic GitHub measurements.
+3. Run `npm test` and `npm run submission:strict` from a clean Node 20+ checkout.
+4. For true model inference, run the documented local/sovereign Apertus endpoint and `npm run eval:live`. It requires actual model access and may take time; there is no false live-data fallback.
+5. Read `docs/TECHNICAL_REPORT.md` for latency, provenance, and limits.
+
+The local quantized model is not an official CSCS inference run. The output proves compatibility and grounded multilingual inference on the declared local setup, not comparable hosted-model throughput.
