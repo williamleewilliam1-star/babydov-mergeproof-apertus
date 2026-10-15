@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><title>MergeProof | Hack Apertus Technical Report</title>
+<style>
+@page{size:A4;margin:0}*{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff;color:#102238;font-family:"Helvetica Neue",Arial,sans-serif;font-size:10.6pt;line-height:1.42}
+.page{width:210mm;height:297mm;padding:18mm 19mm 15mm;break-after:page;page-break-after:always;position:relative;overflow:hidden;background:white}
+.page:last-child{break-after:auto;page-break-after:auto}
+.brand{font-weight:800;font-size:11pt;letter-spacing:1.8px;text-transform:uppercase;color:#177f80}
+.kicker{font-size:9pt;color:#5d7285;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;margin:3mm 0 6mm}
+h1{font-size:32pt;line-height:1.09;letter-spacing:-1.4px;color:#092b3b;margin:2mm 0 6mm}
+h2{font-size:20pt;line-height:1.16;color:#12394a;letter-spacing:-.45px;margin:1mm 0 6mm}
+h3{font-size:12pt;color:#17747b;margin:5mm 0 2mm}
+p{margin:2mm 0 3mm}ul{margin:2mm 0 4mm;padding-left:5mm}li{margin:1.3mm 0}
+.lead{font-size:13pt;color:#415b6b;line-height:1.48;max-width:160mm}
+hr{border:0;border-top:1px solid #dce7eb;margin:6mm 0}
+.accent{color:#057b83}.muted{color:#607384}.small{font-size:9pt}.tiny{font-size:8pt}.mono{font-family:Menlo,Consolas,monospace;font-size:8.7pt}
+.box{background:#eaf5f4;border-left:4px solid #0c8d87;padding:4mm 5mm;margin:5mm 0}
+.box-soft{background:#f3f6f9;padding:4mm 5mm;margin:5mm 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.metric{background:#f2f6f7;padding:4mm 5mm;border-radius:2mm;min-height:21mm}
+.metric b{display:block;font-size:20pt;line-height:1.2;color:#065766}
+.metric span{display:block;font-size:8.6pt;color:#5b7180;margin-top:1mm}
+table{width:100%;border-collapse:collapse;font-size:9.2pt;margin:4mm 0}
+th{background:#143f4d;color:white;text-align:left;padding:3mm 3mm}
+td{border-bottom:1px solid #d9e4e9;padding:2.5mm 3mm;vertical-align:top}
+td:first-child{font-weight:700}.footer{position:absolute;left:19mm;right:19mm;bottom:10mm;display:flex;justify-content:space-between;color:#71838a;font-size:8pt;border-top:1px solid #dce7eb;padding-top:3mm}
+.tag{display:inline-block;border-radius:20px;background:#e4f3f2;color:#07686c;font-weight:700;font-size:8.6pt;padding:1.5mm 3mm;margin-right:2mm}
+.diagram{border:1px solid #d4e5e5;border-radius:2mm;display:flex;align-items:stretch;gap:2mm;padding:3mm;margin:5mm 0}
+.step{background:#eef5f6;padding:3mm 2.4mm;text-align:center;flex:1;color:#124854;font-size:9pt;font-weight:700}
+.arrow{align-self:center;font-size:15pt;color:#17958e}
+pre{background:#102737;color:#e9f4f3;padding:4mm;font-size:8.1pt;white-space:pre-wrap;border-radius:2mm}
+img.capture{width:100%;height:64mm;object-fit:contain;object-position:top center;border:1px solid #d5e6e7;border-radius:2mm}
+a{color:#00738b;text-decoration:none}
+.check{color:#00837f;font-weight:bold}
+</style></head><body>
+<section class="page">
+<div class="brand">MergeProof <span class="muted">/ Evidence-first multilingual AI</span></div>
+<div class="kicker">Hack Apertus 2026 / Apertus Adoption / Track 2B · Own Project</div>
+<h1>Know what a<br/><span class="accent">merged PR proves.</span></h1>
+<p class="lead">An auditable multilingual contribution dossier, grounded in live GitHub evidence and explained by the open Apertus 1.5 model.</p>
+<div class="grid" style="margin-top:9mm">
+<div class="metric"><b>4/4</b><span>Languages retained correct MERGED status in real local Apertus run</span></div>
+<div class="metric"><b>0</b><span>Invalid evidence references accepted after grounding checks</span></div>
+<div class="metric"><b>5 / 5</b><span>Benchmark runs with stable verifiable GitHub facts</span></div>
+<div class="metric"><b>8B</b><span>Locally evaluated Apertus 1.5 community MLX quantization</span></div>
+</div>
+<h3 style="margin-top:9mm">The problem</h3>
+<p>A merged pull request is easy to display and easy to overinterpret. Public portfolios blur the distinction between a merged contribution, a linked issue, a shipped release, and a paid bounty. Model-generated descriptions can inflate such claims.</p>
+<h3>Our answer</h3>
+<p>MergeProof retrieves verifiable GitHub facts, compresses them into a bounded evidence packet, asks Apertus to write clear explanations in English, German, French or Russian, and rejects narrative assertions whose <span class="mono">evidence_refs</span> do not match actual source fields.</p>
+<div class="box"><b>Trust boundary</b><br/>GitHub is authoritative for repository facts. Apertus is an explanation layer, never the judge of merge status, release inclusion or payment.</div>
+<div class="footer"><span>Submission dossier · 15 October 2026</span><span>01 / 05</span></div>
+</section>
+
+<section class="page">
+<div class="brand">01 / System design</div>
+<div class="kicker">Purposeful AI · constrained generation · defensible claims</div>
+<h2>Deterministic first.<br/>Model second.</h2>
+<p>All repository facts are collected independently of Apertus and fed into a compact structured request. Output is not trusted unless each claim points to matching evidence.</p>
+<div class="diagram">
+<div class="step">Public GitHub<br/>PR URL</div><div class="arrow">→</div>
+<div class="step">Evidence<br/>collector</div><div class="arrow">→</div>
+<div class="step">Bounded<br/>JSON packet</div><div class="arrow">→</div>
+<div class="step">Apertus 1.5<br/>multilingual</div><div class="arrow">→</div>
+<div class="step">Grounding<br/>validator</div>
+</div>
+<h3>1. Evidence acquisition</h3>
+<ul><li>GitHub PR state and metadata; changed-file summaries; linked issue references; fetched release matches.</li>
+<li>Strict PR URL parsing, bounded collection and explicit network timeouts.</li>
+<li>Source of truth is retained independently of generated model text.</li></ul>
+<h3>2. Apertus explanation</h3>
+<ul><li>Receives structured, bounded evidence rather than the full repository.</li>
+<li>Produces multilingual claims and a technical/portfolio summary with <span class="mono">evidence_refs</span>.</li>
+<li>Provider adapters support local, CSCS managed and Public AI OpenAI-compatible endpoints.</li></ul>
+<h3>3. Evidence gate</h3>
+<ul><li>Rejects invented references such as <span class="mono">files[0].missing</span>; also checks nested fields.</li>
+<li>Discards unsupported prose and replaces it with deterministic evidence-backed fallback.</li>
+<li>Overrides model-written merge status with the actual GitHub boolean.</li>
+<li>Does not claim bounty payment, security impact, or deployment without separate evidence.</li></ul>
+<div class="box-soft"><b>Safety principle:</b> explanation can be fluent but must not outrank provenance. Invalid model outputs are filtered before the user sees them.</div>
+<h3>Demonstrated target</h3>
+<p><span class="mono">github.com/risa-labs-inc/BossConsole/pull/1681</span> — merged PR, linked issue #1632, two changed files and release reference BOSS v9.5.25.</p>
+<div class="footer"><span>Source repository: williamleewilliam1-star/babydov-mergeproof-apertus</span><span>02 / 05</span></div>
+</section>
+
+<section class="page">
+<div class="brand">02 / Measured results</div>
+<div class="kicker">Technical rigour · real local evaluations</div>
+<h2>Evidence, not invented<br/>benchmark numbers.</h2>
+<div class="grid">
+<div class="metric"><b>5 / 5</b><span>Independent GitHub evidence collections with stable fact profile</span></div>
+<div class="metric"><b>1,060 B</b><span>Compact evidence packet in each recorded run</span></div>
+</div>
+<h3>Public repository evidence benchmark</h3>
+<table><tr><th>Measure</th><th>Observed result</th></tr>
+<tr><td>Benchmark input</td><td>BossConsole PR #1681 (real merged PR)</td></tr>
+<tr><td>Fact stability</td><td>5 runs: merged=true, 2 changed files, 1 linked issue, 1 matched release</td></tr>
+<tr><td>Collection latency</td><td>Min 990.58 ms · median 1,127.70 ms · max 4,568.08 ms</td></tr>
+<tr><td>Network mode</td><td>Anonymous public GitHub API; no GitHub token</td></tr></table>
+<h3>Real Apertus 1.5 8B multilingual evaluation</h3>
+<p class="small">Model: <span class="mono">m1rkocasu/Apertus-v1.5-8B-text-MLX-mxfp4</span> · mlx-lm 0.31.3 · local loopback endpoint on Apple Silicon · thinking disabled. <b>Not</b> a CSCS performance benchmark.</p>
+<table><tr><th>Language</th><th>Observed inference latency</th><th>Grounded summary + portfolio</th></tr>
+<tr><td>English</td><td>17,498 ms</td><td>Pass</td></tr><tr><td>German</td><td>13,373 ms</td><td>Pass</td></tr>
+<tr><td>French</td><td>12,807 ms</td><td>Pass</td></tr><tr><td>Russian</td><td>20,286 ms</td><td>Pass</td></tr></table>
+<p class="small">Median latency: <b>15,435.5 ms</b>. Merge status remained correct in 4/4 languages; invalid accepted evidence refs after sanitization: 0; unsupported narrative fields after sanitization: 0. Four-language output was validated against real GitHub facts.</p>
+<div class="box">An earlier malformed Russian JSON answer motivated exactly one optional format-repair pass using the same Apertus model. The grounding validator runs after repair; repeated malformed output still fails.</div>
+<div class="footer"><span>Reproducible artifacts included in the open repository</span><span>03 / 05</span></div>
+</section>
+
+<section class="page">
+<div class="brand">03 / Prototype</div>
+<div class="kicker">Implementation feasibility · working public demonstration</div>
+<h2>Usable prototype.<br/>Visible evidence.</h2>
+<p>The project has a public browser demo backed by a committed real Apertus evaluation artifact. It is explicitly presented as a <b>recorded evidence demonstration</b>, not as live hosted inference.</p>
+<img class="capture" src="live-demo.png" alt="Screenshot of the public MergeProof demo"/>
+<h3>Reproducible workflow</h3>
+<pre>npm install
+npm test
+npm run benchmark:evidence -- \
+  https://github.com/risa-labs-inc/BossConsole/pull/1681 \
+  artifacts/benchmark-bossconsole-1681.json
+
+# Optional: verify a configured Apertus model provider
+npm run verify:apertus</pre>
+<p>The public demonstration allows a reviewer to inspect the PR facts, selected language and linked evidence. The web client is an evidence viewer, not an unfounded promise of on-demand model hosting.</p>
+<h3>Deployment</h3>
+<ul><li>Lightweight stateless Node/JavaScript service and static demo.</li><li>Provider-configurable model backend; no required proprietary model API.</li>
+<li>Source code under Apache-2.0; documentation and design content under CC-BY-4.0.</li></ul>
+<div class="footer"><span>Demo: williamleewilliam1-star.github.io/babydov-mergeproof-apertus/</span><span>04 / 05</span></div>
+</section>
+
+<section class="page">
+<div class="brand">04 / Judging alignment & caveats</div>
+<div class="kicker">Cost · scalability · sovereignty · reproducibility</div>
+<h2>What is demonstrated.<br/>What remains open.</h2>
+<table><tr><th>Track 2B criterion</th><th>Substantiated fit</th></tr>
+<tr><td>Purposeful AI</td><td>Multilingual explanation of technical contributions is useful; the model is bounded by source evidence.</td></tr>
+<tr><td>Technical rigour</td><td>Nested field-level grounding, deterministic merge override, regression tests and recorded real model evaluation.</td></tr>
+<tr><td>Value & scalability</td><td>Bounded JSON evidence; no full-repository prompt; anonymous GitHub reads supported for low-volume use.</td></tr>
+<tr><td>Sovereign deployment</td><td>Apertus 1.5 local compatible path and configurable OpenAI-compatible inference providers.</td></tr>
+<tr><td>Feasibility</td><td>Open source, working recorded public demo, benchmark artifacts and implementation instructions.</td></tr></table>
+<h3>Measured bounds and limitations</h3>
+<ul><li>Collector caps: up to 40 changed-file summaries, 10 linked issues, 10 release matches.</li>
+<li>Anonymous public GitHub API is rate-limited; production usage requires careful rate-limit handling.</li>
+<li>Inference latency was measured <b>locally</b>, not at CSCS.</li>
+<li>Current public demo replays a committed real evidence run; interactive hosted inference is optional and is not claimed here.</li>
+<li>Payment, security severity and business impact are outside the present verified evidence schema.</li></ul>
+<h3>Open-source implementation & evidence</h3>
+<p class="small"><b>Repository:</b> <span class="mono">github.com/williamleewilliam1-star/babydov-mergeproof-apertus</span></p>
+<p class="small"><b>Demo:</b> <span class="mono">williamleewilliam1-star.github.io/babydov-mergeproof-apertus/</span></p>
+<p class="small"><b>Benchmark files:</b> <span class="mono">artifacts/benchmark-bossconsole-1681.json</span> and <span class="mono">artifacts/live-eval-local-apertus-mxfp4-20261003.json</span>.</p>
+<div class="box"><b>Submission integrity:</b> findings are limited to measured or auditable evidence. No invented reward claim, paid deployment, official hosted latency, or production traction is implied.</div>
+<p class="tiny muted" style="margin-top:7mm">Submitted for Hack Apertus 2026, Track 2B Own Project. Source license: Apache-2.0; non-code contents: CC-BY-4.0.</p>
+<div class="footer"><span>Prepared from published artifacts on 15 October 2026</span><span>05 / 05</span></div>
+</section>
+</body></html>
